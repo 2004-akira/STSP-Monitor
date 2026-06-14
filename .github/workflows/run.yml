@@ -1,7 +1,11 @@
 name: StudySapuri Monitor
 
 on:
+
   workflow_dispatch:
+
+  schedule:
+    - cron: '*/3 * * * *'
 
 jobs:
   run:
