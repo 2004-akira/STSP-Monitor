@@ -205,6 +205,28 @@ with open(
 
 history_file = "activity_history.csv"
 
+history_df = pd.read_csv(
+    history_file,
+    encoding="utf-8-sig"
+)
+
+history_df["タイムスタンプ"] = pd.to_datetime(
+    history_df["タイムスタンプ"],
+    utc=True
+).dt.tz_convert("Asia/Tokyo")
+
+history_df["ID"] = history_df["ID"].astype(str)
+df["ID"] = df["ID"].astype(str)
+
+new_df = df[
+    ~df["ID"].isin(history_df["ID"])
+]
+
+history_df = pd.concat(
+    [history_df, new_df],
+    ignore_index=True
+)
+
 history_df = history_df.drop_duplicates(
     subset=["ID"]
 )
