@@ -1,0 +1,26 @@
+name: StudySapuri Monitor
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+
+    - run: pip install -r requirements.txt
+
+    - run: python main.py
+      env:
+        STSP_TOKEN: ${{ secrets.STSP_TOKEN }}
+        FOLDER_ID: ${{ secrets.FOLDER_ID }}
+        SCHOOLCLASS: ${{ secrets.SCHOOLCLASS }}
+        GOOGLE_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
