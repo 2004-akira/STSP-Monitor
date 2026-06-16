@@ -465,31 +465,31 @@ th {{
     background-color: #ffffee;
 }}
 
-th, td {
+th, td {{
     white-space: normal;
     overflow-wrap: break-word;
-}
+}}
 
 table th:nth-child(1),
-table td:nth-child(1) {
+table td:nth-child(1) {{
     width: 200px;
     min-width: 200px;
     max-width: 200px;
-}
+}}
 
 table th:nth-child(2),
-table td:nth-child(2) {
+table td:nth-child(2) {{
     width: 40px;
     min-width: 40px;
     max-width: 40px;
-}
+}}
 
 table th:nth-child(n+3),
-table td:nth-child(n+3) {
+table td:nth-child(n+3) {{
     width: 100px;
     min-width: 100px;
     max-width: 100px;
-}
+}}
 </style>
 
 </head>
