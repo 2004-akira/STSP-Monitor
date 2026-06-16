@@ -405,10 +405,8 @@ total_students = (
 )
 
 latest_row = {
-    "学習内容":
-        '<div class="latest-row">最新の提出記録</div>',
-    "提出人数":
-        f'<div class="latest-row">{total_students}人</div>'
+    "学習内容": "最新の提出記録",
+    "提出人数": f"{total_students}人"
 }
 
 for _, row in latest_logs.iterrows():
@@ -433,6 +431,12 @@ html = result.to_html(
     na_rep="",
     border=1,
     index=False
+)
+
+html = html.replace(
+    "<tbody>\n    <tr>",
+    '<tbody>\n    <tr class="latest-row">',
+    1
 )
 
 periodstart = record_start.strftime("%-m/%-d %H:%M")
@@ -468,12 +472,12 @@ body {{
 .site-header {{
   background-color: #622599;
   color: #ffffff;
-  font-size: 30px;
+  font-size: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 50px;
+  height: 80px;
 }}
 
 .description {{
@@ -484,7 +488,7 @@ body {{
 
 .table-container {{
     overflow: auto;
-    max-height: 85vh;
+    max-height: 80vh;
 }}
 
 table {{
@@ -513,9 +517,9 @@ th, td {{
 
 table th:nth-child(1),
 table td:nth-child(1) {{
-    width: 240px;
-    min-width: 240px;
-    max-width: 240px;
+    width: 250px;
+    min-width: 250px;
+    max-width: 250px;
     position: sticky;
     left: 0;
     z-index: 20;
@@ -524,16 +528,16 @@ table td:nth-child(1) {{
 
 table th:nth-child(2),
 table td:nth-child(2) {{
-    width: 80px;
-    min-width: 80px;
-    max-width: 80px;
+    width: 70px;
+    min-width: 70px;
+    max-width: 70px;
 }}
 
 table th:nth-child(n+3),
 table td:nth-child(n+3) {{
-    width: 160px;
-    min-width: 160px;
-    max-width: 160px;
+    width: 180px;
+    min-width: 180px;
+    max-width: 180px;
 }}
 
 table th:nth-child(1) {{
@@ -542,8 +546,12 @@ table th:nth-child(1) {{
     color: #ffffff;
 }}
 
-.latest-row {{
-    background-color: #eeffff;
+.latest-row td {{
+    background-color: #eeffff !important;
+}}
+
+.latest-row td:nth-child(1) {{
+    background-color: #eeffff !important;
 }}
 
 .subject {{
@@ -557,7 +565,7 @@ table th:nth-child(1) {{
 <header class="site-header">
   <h1>2026年度 {schoolclass} スタサプ提出状況</h1>
 </header>
-<h3 style="description">記録開始： {periodstart}   ・   最終更新： {periodend}<br>
+<h3 class="description">記録開始： {periodstart}   ・   最終更新： {periodend}<br>
 記録開始から最終更新までの期間に提出されたスタサプの宿題の提出日時を表示します。<br>
 全問正解したら提出日時のとなりに「◎」がつきます。{incomplete}</h3>
 
