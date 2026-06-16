@@ -215,6 +215,46 @@ history_df["タイムスタンプ"] = pd.to_datetime(
     utc=True
 ).dt.tz_convert("Asia/Tokyo")
 
+today = now.date()
+
+yesterday = (
+    now - pd.Timedelta(days=1)
+).date()
+
+def format_display(row):
+
+    d = row["タイムスタンプ"].date()
+
+    time_part = row["タイムスタンプ"].strftime(
+        "%H:%M:%S"
+    )
+
+    if d == today:
+
+        date_part = "今日"
+
+    elif d == yesterday:
+
+        date_part = "昨日"
+
+    else:
+
+        date_part = row["タイムスタンプ"].strftime(
+            "%-m/%-d"
+        )
+
+    return (
+        f"{date_part} {time_part}"
+        f"{row['全問正解']}"
+    )
+
+history_df["記録"] = (
+    history_df.apply(
+        format_display,
+        axis=1
+    )
+)
+
 history_df["ID"] = history_df["ID"].astype(str)
 df["ID"] = df["ID"].astype(str)
 
@@ -229,6 +269,11 @@ history_df = pd.concat(
 
 history_df = history_df.drop_duplicates(
     subset=["ID"]
+)
+
+history_df = history_df.sort_values(
+    "タイムスタンプ",
+    ascending=False
 )
 
 history_df.to_csv(
@@ -338,6 +383,35 @@ result["学習内容"] = (
     + result["学習内容"].astype(str)
     + '</div>'
 )
+latest_logs = (
+    history_df.sort_values(
+        "タイムスタンプ",
+        ascending=False
+    )
+    .drop_duplicates(
+        subset=["生徒氏名"]
+    )
+)
+
+latest_row = {
+    "学習内容": "最新の提出記録",
+    "提出人数": ""
+}
+
+for _, row in latest_logs.iterrows():
+
+    latest_row[row["生徒氏名"]] = (
+        f'{row["記録"]}<br>'
+        f'{row["学習内容"]}'
+    )
+
+result = pd.concat(
+    [
+        pd.DataFrame([latest_row]),
+        result
+    ],
+    ignore_index=True
+)
 
 html = result.to_html(
     escape=False,
@@ -372,7 +446,7 @@ with open(
 <style>
 body {{
     font-family: sans-serif;
-    font-size: 8px;
+    font-size: 12px;
     line-height: 1.2;
 }}
 
@@ -391,24 +465,38 @@ th {{
     background-color: #ffffee;
 }}
 
-td {{
-    white-space: nowrap;
-}}
+th, td {
+    white-space: normal;
+    overflow-wrap: break-word;
+}
 
-.subject {{
+table th:nth-child(1),
+table td:nth-child(1) {
     width: 200px;
     min-width: 200px;
     max-width: 200px;
-    white-space: normal;
-    overflow-wrap: break-word;
-}}
+}
+
+table th:nth-child(2),
+table td:nth-child(2) {
+    width: 40px;
+    min-width: 40px;
+    max-width: 40px;
+}
+
+table th:nth-child(n+3),
+table td:nth-child(n+3) {
+    width: 100px;
+    min-width: 100px;
+    max-width: 100px;
+}
 </style>
 
 </head>
 <body>
 
-<h1 style="color: #622599;"><u>2026年度 {schoolclass} スタサプ提出状況</u></h1>
-<h3 style="color: #00664b;">記録開始日時： {periodstart}   ・   最終更新日時： {periodend}<br>
+<h1 style="font-size: 50px; color: #622599;"><u>2026年度 {schoolclass} スタサプ提出状況</u></h1>
+<h3 style="font-size: 25px; color: #00664b;">記録開始日時： {periodstart}   ・   最終更新日時： {periodend}<br>
 記録開始日時から最終更新日時までの期間に提出されたスタサプの宿題の提出日時を表示します。<br>
 全問正解したら提出日時のとなりに「◎」がつきます。{incomplete}</h3>
 
