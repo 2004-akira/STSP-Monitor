@@ -210,10 +210,27 @@ history_df = pd.read_csv(
     encoding="utf-8-sig"
 )
 
+history_df["ID"] = history_df["ID"].astype(str)
+df["ID"] = df["ID"].astype(str)
+
+new_df = df[
+    ~df["ID"].isin(history_df["ID"])
+]
+
+history_df = pd.concat(
+    [history_df, new_df],
+    ignore_index=True
+)
+
 history_df["タイムスタンプ"] = pd.to_datetime(
     history_df["タイムスタンプ"],
     utc=True
 ).dt.tz_convert("Asia/Tokyo")
+
+history_df["全問正解"] = (
+    history_df["全問正解"]
+    .fillna("")
+)
 
 today = now.date()
 
@@ -253,18 +270,6 @@ history_df["記録"] = (
         format_display,
         axis=1
     )
-)
-
-history_df["ID"] = history_df["ID"].astype(str)
-df["ID"] = df["ID"].astype(str)
-
-new_df = df[
-    ~df["ID"].isin(history_df["ID"])
-]
-
-history_df = pd.concat(
-    [history_df, new_df],
-    ignore_index=True
 )
 
 history_df = history_df.drop_duplicates(
@@ -383,6 +388,7 @@ result["学習内容"] = (
     + result["学習内容"].astype(str)
     + '</div>'
 )
+
 latest_logs = (
     history_df.sort_values(
         "タイムスタンプ",
@@ -393,9 +399,14 @@ latest_logs = (
     )
 )
 
+total_students = (
+    history_df["生徒氏名"]
+    .nunique()
+)
+
 latest_row = {
     "学習内容": "最新の提出記録",
-    "提出人数": ""
+    "提出人数": f"{total_students}人"
 }
 
 for _, row in latest_logs.iterrows():
@@ -446,7 +457,7 @@ with open(
 <style>
 body {{
     font-family: sans-serif;
-    font-size: 12px;
+    font-size: 16px;
     line-height: 1.2;
 }}
 
@@ -472,23 +483,23 @@ th, td {{
 
 table th:nth-child(1),
 table td:nth-child(1) {{
-    width: 200px;
-    min-width: 200px;
-    max-width: 200px;
+    width: 250px;
+    min-width: 250px;
+    max-width: 250px;
 }}
 
 table th:nth-child(2),
 table td:nth-child(2) {{
-    width: 40px;
-    min-width: 40px;
-    max-width: 40px;
+    width: 75px;
+    min-width: 75px;
+    max-width: 75px;
 }}
 
 table th:nth-child(n+3),
 table td:nth-child(n+3) {{
-    width: 100px;
-    min-width: 100px;
-    max-width: 100px;
+    width: 150px;
+    min-width: 150px;
+    max-width: 150px;
 }}
 </style>
 
@@ -496,7 +507,7 @@ table td:nth-child(n+3) {{
 <body>
 
 <h1 style="font-size: 50px; color: #622599;"><u>2026年度 {schoolclass} スタサプ提出状況</u></h1>
-<h3 style="font-size: 25px; color: #00664b;">記録開始日時： {periodstart}   ・   最終更新日時： {periodend}<br>
+<h3 style="font-size: 16px; color: #00664b;">記録開始日時： {periodstart}   ・   最終更新日時： {periodend}<br>
 記録開始日時から最終更新日時までの期間に提出されたスタサプの宿題の提出日時を表示します。<br>
 全問正解したら提出日時のとなりに「◎」がつきます。{incomplete}</h3>
 
