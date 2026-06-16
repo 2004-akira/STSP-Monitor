@@ -405,15 +405,19 @@ total_students = (
 )
 
 latest_row = {
-    "学習内容": "最新の提出記録",
-    "提出人数": f"{total_students}人"
+    "学習内容":
+        '<div class="latest-row">最新の提出記録</div>',
+    "提出人数":
+        f'<div class="latest-row">{total_students}人</div>'
 }
 
 for _, row in latest_logs.iterrows():
 
     latest_row[row["生徒氏名"]] = (
+        f'<div class="latest-row">'
         f'{row["記録"]}<br>'
         f'{row["学習内容"]}'
+        f'</div>'
     )
 
 result = pd.concat(
@@ -461,19 +465,45 @@ body {{
     line-height: 1.2;
 }}
 
+.site-header {{
+  background-color: #622599;
+  color: #ffffff;
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+}}
+
+.description {{
+  font-size: 12px;
+  color: #00664b;
+  text-align: center;
+}}
+
+.table-container {{
+    overflow: auto;
+    max-height: 85vh;
+}}
+
 table {{
     border-collapse: collapse;
 }}
 
 th, td {{
-    border: 1px solid #888;
+    border: 1.5px solid #000000;
     padding: 3px;
     vertical-align: top;
     text-align: left;
 }}
 
 th {{
-    background-color: #ffffee;
+    background-color: #808080;
+    color: #ffffff;
+    position: sticky;
+    top: 0;
+    z-index: 30;
 }}
 
 th, td {{
@@ -483,35 +513,57 @@ th, td {{
 
 table th:nth-child(1),
 table td:nth-child(1) {{
-    width: 250px;
-    min-width: 250px;
-    max-width: 250px;
+    width: 240px;
+    min-width: 240px;
+    max-width: 240px;
+    position: sticky;
+    left: 0;
+    z-index: 20;
+    background-color: #ffffee;
 }}
 
 table th:nth-child(2),
 table td:nth-child(2) {{
-    width: 75px;
-    min-width: 75px;
-    max-width: 75px;
+    width: 80px;
+    min-width: 80px;
+    max-width: 80px;
 }}
 
 table th:nth-child(n+3),
 table td:nth-child(n+3) {{
-    width: 150px;
-    min-width: 150px;
-    max-width: 150px;
+    width: 160px;
+    min-width: 160px;
+    max-width: 160px;
+}}
+
+table th:nth-child(1) {{
+    z-index: 40;
+    background-color: #808080;
+    color: #ffffff;
+}}
+
+.latest-row {{
+    background-color: #eeffff;
+}}
+
+.subject {{
+    background-color: #ffffee;
 }}
 </style>
 
 </head>
 <body>
 
-<h1 style="font-size: 50px; color: #622599;"><u>2026年度 {schoolclass} スタサプ提出状況</u></h1>
-<h3 style="font-size: 16px; color: #00664b;">記録開始日時： {periodstart}   ・   最終更新日時： {periodend}<br>
-記録開始日時から最終更新日時までの期間に提出されたスタサプの宿題の提出日時を表示します。<br>
+<header class="site-header">
+  <h1>2026年度 {schoolclass} スタサプ提出状況</h1>
+</header>
+<h3 style="description">記録開始： {periodstart}   ・   最終更新： {periodend}<br>
+記録開始から最終更新までの期間に提出されたスタサプの宿題の提出日時を表示します。<br>
 全問正解したら提出日時のとなりに「◎」がつきます。{incomplete}</h3>
 
+<div class="table-container">
 {html}
+</div>
 
 </body>
 </html>
