@@ -481,14 +481,14 @@ body {{
 }}
 
 .description {{
-  font-size: 12px;
+  font-size: 11px;
   color: #00664b;
   text-align: center;
 }}
 
 .table-container {{
     overflow: auto;
-    max-height: 85vh;
+    max-height: 90vh;
 }}
 
 table {{
@@ -566,8 +566,8 @@ table th:nth-child(1) {{
   <h1>2026年度 {schoolclass} スタサプ提出状況</h1>
 </header>
 <h3 class="description">記録開始： {periodstart}   ・   最終更新： {periodend}<br>
-<span style="font-size: 10px;">記録開始から最終更新までの期間に提出されたスタサプの宿題の提出日時を表示します。<br>
-全問正解したら提出日時のとなりに「◎」がつきます。{incomplete}</span></h3>
+記録開始から最終更新までの期間に提出されたスタサプの宿題の提出日時を表示します。<br>
+全問正解したら提出日時のとなりに「◎」がつきます。{incomplete}</h3>
 
 <div class="table-container">
 {html}
