@@ -472,12 +472,12 @@ body {{
 .site-header {{
   background-color: #622599;
   color: #ffffff;
-  font-size: 12px;
+  font-size: 16px;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 80px;
+  height: 70px;
 }}
 
 .description {{
@@ -488,7 +488,7 @@ body {{
 
 .table-container {{
     overflow: auto;
-    max-height: 80vh;
+    max-height: 85vh;
 }}
 
 table {{
@@ -496,7 +496,7 @@ table {{
 }}
 
 th, td {{
-    border: 1.5px solid #000000;
+    border: 1px solid #000000;
     padding: 3px;
     vertical-align: top;
     text-align: left;
@@ -566,8 +566,8 @@ table th:nth-child(1) {{
   <h1>2026年度 {schoolclass} スタサプ提出状況</h1>
 </header>
 <h3 class="description">記録開始： {periodstart}   ・   最終更新： {periodend}<br>
-記録開始から最終更新までの期間に提出されたスタサプの宿題の提出日時を表示します。<br>
-全問正解したら提出日時のとなりに「◎」がつきます。{incomplete}</h3>
+<span style="font-size: 10px;">記録開始から最終更新までの期間に提出されたスタサプの宿題の提出日時を表示します。<br>
+全問正解したら提出日時のとなりに「◎」がつきます。{incomplete}</span></h3>
 
 <div class="table-container">
 {html}
